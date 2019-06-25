@@ -1,0 +1,48 @@
+1. What’s the most expensive listing? What else can you tell me about the listing?
+
+Price: $10,000
+It’s for an entire 4-floor, 7,500 SqFt Victorian house with a Hot Tub. Owned by Sarah in the Western Addition neighborhood
+
+The 4 reviewers Dave, David, Kim, and Angie all left very positive reviews. 
+
+Code:
+-- get listing info
+SELECT * FROM sfo_listings
+ORDER BY price DESC LIMIT 1
+
+-- get reviews:
+SELECT comments FROM sfo_reviews
+WHERE listing_id = 24650875
+
+
+
+2. What neighborhoods seem to be the most popular?
+
+The neighborhoods of Mission, Western Addition, South of Market, and Downtown/Civic Center are the most popular
+
+code:
+SELECT neighbourhood, COUNT(*) FROM sfo_listings
+GROUP BY neighbourhood
+ORDER BY count DESC
+
+
+
+3. What time of year is the cheapest to go to San Fransisco? What about the busiest?
+****The column names and values in 'cheapest' table were a bit cryptic.
+I Assumed that the column "cheap_date" is a date when the listing is cheaper than usual****
+
+July and August were the cheapest months. 
+
+Summer/fall is the busiest. In order, the busiest months are September, October, June, July, and August. 
+
+code:
+--find chepeast months
+SELECT date_part('month', cheap_date), COUNT(*) FROM cheapest
+GROUP BY date_part
+ORDER BY count DESC
+
+--find busiest months (months were 'available' was most often 'true')
+SELECT DISTINCT date_part('month', calender_date), COUNT(*) FROM sfo_calendar
+WHERE available = 't'
+GROUP BY date_part
+ORDER BY count
